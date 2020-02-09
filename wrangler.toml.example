@@ -1,0 +1,14 @@
+type = "webpack"
+name = "cf-metrics"
+webpack_config = "webpack.config.js"
+
+account_id = ""
+zone_id = ""
+
+[env.staging]
+name = "cf-metrics-staging"
+workers_dev = true
+
+[env.production]
+name = "cf-metrics-production"
+route = ""
