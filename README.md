@@ -1,17 +1,34 @@
-# 👷 `worker-template` Hello World
+# Cloudflare metrics worker
 
-A template for kick starting a Cloudflare worker project.
+Send your page views from [Cloudflare worker](https://developers.cloudflare.com/workers/) to InfluxDB.
 
-[`index.js`](https://github.com/cloudflare/worker-template/blob/master/index.js) is the content of the Workers script.
+![Dashboard views](static/dashboard.png)
 
-#### Wrangler
+## Requirements
 
-To generate using [wrangler](https://github.com/cloudflare/wrangler)
+1. Your site need to be setup behind Cloudflare CDN.
+2. You need to setup InfluxDB with external access (make sure you have set [authentication](https://docs.influxdata.com/influxdb/v1.7/administration/authentication_and_authorization/#set-up-authentication))
+   1. Make sure InfluxDB is hosted under [supported port](https://blog.cloudflare.com/cloudflare-now-supporting-more-ports/) for Workers. Best option is 80 or 443.
+
+## How to use
+
+1. Install wrangler package
 
 ```
-wrangler generate projectname https://github.com/cloudflare/worker-template
+npm i @cloudflare/wrangler -g
 ```
 
-#### Serverless
+2. Copy example files
 
-To deploy using serverless add a [`serverless.yml`](https://serverless.com/framework/docs/providers/cloudflare/) file.
+```
+cp .env.example .env
+cp wrangler.toml.example wrangler.toml
+```
+
+3. Deploy your worker to a site with wrangler
+
+```
+wrangler publish --env production
+```
+
+4. (Optional) If you're using Grafana with InfluxDB, then you can import [example Dashboard](static/dashboard.json) from first screen.
