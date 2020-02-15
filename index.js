@@ -32,6 +32,10 @@ async function logRequests(event) {
   const response = await fetch(event.request);
   requestEndTime = Date.now();
 
+  if (event.request.headers.get('DNT') === '1') {
+    return response;
+  }
+
   requests.push(getRequestData(event.request, response, requestStartTime, requestEndTime));
 
   return response;
@@ -91,7 +95,6 @@ function formMetricLine(data) {
 
 async function sendMetricsToInfuxDB() {
   const metrics = requests.map(formMetricLine).join('\n');
-  console.log("posting", metrics);
   try {
     return fetch(INFLUXDB_URL, {
       method: 'POST',
