@@ -1,3 +1,5 @@
+const parser = require('ua-parser-js');
+
 // settings
 const MAX_REQUESTS_PER_BATCH = process.env.MAX_REQUESTS_PER_BATCH || 150;
 const MAX_TIME_AWAIT_PER_BATCH = process.env.MAX_TIME_AWAIT_PER_BATCH || 10 * 1000;
@@ -76,6 +78,7 @@ function formMetricLine(data) {
   let referer;
   const url = new URL(data.url);
   const utmSource = url.searchParams.get('utm_source') || 'empty';
+  const ua = parser(data.userAgent);
   try {
     referer = new URL(data.referer);
   } catch {
@@ -83,7 +86,7 @@ function formMetricLine(data) {
       hostname: 'empty'
     };
   }
-  return `${INFLUXDB_METRIC},status_code=${data.status},url=${data.url},hostname=${url.hostname},pathname=${url.pathname},method=${data.method},cf_cache=${data.cfCache},country=${data.countryCode},referer=${referer.hostname},utm_source=${utmSource} duration=${data.originTime} ${data.timestamp}`
+  return `${INFLUXDB_METRIC},status_code=${data.status},url=${data.url},hostname=${url.hostname},pathname=${url.pathname},method=${data.method},cf_cache=${data.cfCache},country=${data.countryCode},referer=${referer.hostname},utm_source=${utmSource},browser=${ua.browser.name},os=${ua.os.name},device=${ua.device.type} duration=${data.originTime} ${data.timestamp}`
 }
 
 async function sendMetricsToInfuxDB() {
