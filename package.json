@@ -14,7 +14,7 @@
     "dotenv": "^8.2.0",
     "prettier": "^1.18.2",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "ua-parser-js": "^0.7.24"
